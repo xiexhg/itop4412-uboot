@@ -74,7 +74,8 @@
     "bootscript=echo Running bootscript from mmc${mmcdev} ...; " \
     "source ${loadaddr}\0" \
     "ipaddr=192.168.2.180\0" \
-    "serverip=192.168.2.254\0"
+    "serverip=192.168.2.254\0" \
+    "preboot=usb start;usb reset"
 #define CONFIG_BOOTCOMMAND \
     "if mmc rescan; then " \
         "echo SD/MMC found on device ${mmcdev};" \
