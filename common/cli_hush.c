@@ -1056,7 +1056,7 @@ static void get_user_input(struct in_str *i)
 		else {
 			if (console_buffer[0] != '\n') {
 				strcpy(the_command,console_buffer);
-				flag_repeat = 1;
+				flag_repeat = 0;
 			}
 			else {
 				do_repeat = 1;
@@ -1675,8 +1675,9 @@ static int run_pipe_real(struct pipe *pi)
 			return -1;
 		}
 		/* Process the command */
+		int repeat;
 		return cmd_process(flag, child->argc, child->argv,
-				   &flag_repeat, NULL);
+				   &repeat, NULL);
 #endif
 	}
 #ifndef __U_BOOT__
