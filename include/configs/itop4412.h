@@ -100,7 +100,7 @@
 #define CONFIG_MIU_2BIT_21_7_INTERLEAVED
 
 #define CONFIG_SYS_MMC_ENV_DEV      0
-#define CONFIG_ENV_SIZE         (8 << 10)   /* 16 KB */
+#define CONFIG_ENV_SIZE         (8 << 10)   /* 8 KB */
 #define RESERVE_BLOCK_SIZE      (512)
 #define BL1_SIZE            (8 << 10) /*8 K reserved for BL1*/
 #define BL2_SIZE            (16 << 10) /*16 K reserved for BL2 */
@@ -116,5 +116,9 @@
 #define COPY_BL2_SIZE       0x100000
 #define BL2_START_OFFSET    ((CONFIG_ENV_OFFSET + CONFIG_ENV_SIZE)/512)
 #define BL2_SIZE_BLOC_COUNT (COPY_BL2_SIZE/512)
+
+
+#define CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_PARTITION 1
+
 
 #endif  /* __CONFIG_H */

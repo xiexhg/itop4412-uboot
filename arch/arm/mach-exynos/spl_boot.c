@@ -15,6 +15,7 @@
 #include <asm/arch/power.h>
 #include <asm/arch/spl.h>
 #include <asm/arch/spi.h>
+#include <asm/gpio.h>
 
 #include "common_setup.h"
 #include "clock_init.h"
@@ -213,7 +214,7 @@ void copy_uboot_to_ram(void)
 
 	if (bootmode == BOOT_MODE_OM)
 		bootmode = get_boot_mode();
-
+    printf("bootmode:%d\n",bootmode);
 	switch (bootmode) {
 #ifdef CONFIG_SPI_BOOTING
 	case BOOT_MODE_SERIAL:
@@ -228,6 +229,7 @@ void copy_uboot_to_ram(void)
 		break;
 #ifdef CONFIG_SUPPORT_EMMC_BOOT
 	case BOOT_MODE_EMMC:
+	case BOOT_MODE_EMMC_SD:
 		/* Set the FSYS1 clock divisor value for EMMC boot */
 #ifndef CONFIG_ITOP4412
 		/* just for exynos5 can be call */
@@ -235,8 +237,9 @@ void copy_uboot_to_ram(void)
 #endif
 		copy_bl2_from_emmc = get_irom_func(EMMC44_INDEX);
 		end_bootop_from_emmc = get_irom_func(EMMC44_END_INDEX);
-
-		copy_bl2_from_emmc(BL2_SIZE_BLOC_COUNT, CONFIG_SYS_TEXT_BASE);
+		copy_bl2_from_emmc(CONFIG_ENV_SIZE / 512, CONFIG_SYS_TEXT_BASE);
+		u32 ret = copy_bl2_from_emmc(BL2_SIZE_BLOC_COUNT, CONFIG_SYS_TEXT_BASE);		
+		printf("copy_bl2_from_emmc ret:%u \n", ret);
 		end_bootop_from_emmc();
 		break;
 #endif
@@ -291,12 +294,11 @@ void board_init_f(unsigned long bootflag)
 	__attribute__((noreturn)) void (*uboot)(void);
 
 	setup_global_data(&local_gd);
-
 	if (do_lowlevel_init())
 		power_exit_wakeup();
 
 	copy_uboot_to_ram();
-
+	printf("copy_uboot_to_ram end\n");
 	/* Jump to U-Boot image */
 	uboot = (void *)CONFIG_SYS_TEXT_BASE;
 	(*uboot)();

@@ -71,6 +71,7 @@
 &sdhci2 {
 	samsung,bus-width = <4>;
 	/* cd-gpios = <&gpx0 7 0>; */
+	samsung,timing = <1 2 3>;
 	cd-gpios = <&gpk2 2 0>;
 	status = "okay";
 };
